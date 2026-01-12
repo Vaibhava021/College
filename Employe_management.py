@@ -29,31 +29,24 @@ class empDB:
         print("Data Added")
 
     def find(self, ID):
-        for row in self.ws.iter_rows(min_row=1, values_only=True):
+        for row in self.ws.iter_rows(min_row=2, values_only=True):
             if row[0] == ID:
                 print(row)
                 return
-        print(f"The data for 'EMPID:{id}' is not present in database")
+        print(f"The data for 'EMPID:{ID}' is not present in database")
 
     def modify(self, ID):
-        modData = ["" for _ in range(len(headers)-1)]
-        count = 1
         for row in self.ws.iter_rows(min_row=1,):
             if row[0].value == ID:
-                print("Leave Empty if not want to modify")
-                modData[0] = input("Enter New Name: ")
-                modData[1] = input("Enter New Dept: ")
-                modData[2] = input("Enter New Sal: ")
-                for data in modData:
-                    if data == "":
-                        count +=1
-                        continue    
-                    row[count].value = data
-                    count +=1
+                print("Leave Empty to skip Modication")
+                for i in range(1, len(self.headers)):
+                    new_data = input(f"Enter new {headers[i+1]}")
+                    if new_data != "":
+                        row[i+1].value = new_data
                 self.wb.save(self.filename)
                 print("Data Modified")
                 return
-        print(f"Data for 'EMPId:{id}' not present in database")
+        print(f"Data for 'EMPId:{ID}' not present in database")
         return
 
     def delete(self, ID):
@@ -68,13 +61,14 @@ class empDB:
                     print("Data not deleted")
                 self.wb.save(self.filename)
                 return
-        print(f"The data for 'EMPID:{id}' is not present in database")
+        print(f"The data for 'EMPID:{ID}' is not present in database")
         return
 
 
 
 if __name__ == "__main__":
     headers = ["EMPID","EmpName","Dept","Salary"]
+    db = empDB("Employee_databse.xlsx", headers=headers)
     while True:
         print("1. Add Employee")
         print("2. Find Employee")
@@ -82,7 +76,6 @@ if __name__ == "__main__":
         print("4. Delete Employee")
         print("5. Exit")
 
-        db = empDB("Employee_databse.xlsx", headers=headers)
 
         ch = msvcrt.getch().decode()
         match ch:
