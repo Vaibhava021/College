@@ -66,7 +66,7 @@ class empDB:
         rows_to_recover = []
 
         for row_num, row in enumerate(self.re_ws.iter_rows(min_row=2), start=2):
-            if(recover_all or row[0].value == ID or recover_all):
+            if(row[0].value == ID or recover_all):
                 rows_to_recover.append((row_num,[cell.value for cell in row]))
         
         if not rows_to_recover:
